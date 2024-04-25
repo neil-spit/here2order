@@ -84,7 +84,6 @@ document.getElementById('viewCart').addEventListener('click', function () {
 
 // Event listener for checkout button
 document.getElementById('checkout').addEventListener('click', function () {
-  // Here you can implement checkout logic
   alert('Thank you for your order!');
   cart = [];
   updateCart();
