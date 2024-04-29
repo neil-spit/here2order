@@ -12,7 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
+    "firmata": "^2.3.0",
+    "johnny-five": "^2.1.0",
     "node": "^18.20.2",
-    "socket.io": "^4.7.5"
+    "node-serial": "^0.1.1",
+    "noduino": "^0.0.1",
+    "nvm": "^0.0.4",
+    "socket.io": "^4.7.5",
+    "xcode": "^3.0.1"
   }
 }

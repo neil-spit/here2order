@@ -77,13 +77,18 @@ function updateCart() {
 // Initialize
 displayMenu();
 
-// main.js
-
 const socket = io(); // Establish WebSocket connection with the server
 
 document.getElementById('checkout').addEventListener('click', function () {
   socket.emit('checkout'); // Send a message to the server
 });
 
-
 window.onload = displayMenu;
+
+// Event listener for the 'toggleLED' event
+socket.on('toggleLED', function () {
+  // Perform the action to toggle the LED
+  // For example, you can change the color of an LED icon or display a message
+  console.log('Received toggleLED event from the server');
+  // Add your code to toggle the LED here
+});
