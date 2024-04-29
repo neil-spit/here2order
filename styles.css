@@ -16,6 +16,13 @@ body {
   text-align: left; /* Reset text alignment for the menu items */
 }
 
+#title {
+  margin-right: auto; 
+  font-family: 'Now', sans-serif; 
+  color: #41C1BA; 
+  font-size: 25px;
+}
+
 header {
   background-color: #333;
   color: #fff;

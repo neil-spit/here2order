@@ -1,6 +1,6 @@
 // Sample food items data
 const menuItems = [
-  { id: 1, name: 'Soy Burger', price: 238, image: 'veggie_burger.webp' },
+  { id: 1, name: 'Soy Burger', price: 238, image: 'veggie_burger.jpeg' },
   { id: 2, name: 'Beef Burger', price: 2430, image: 'beef_burger.jpeg' },
   { id: 3, name: 'Chicken Burger', price: 753, image: 'chicken_burger.jpeg' },
   // Add more items as needed
@@ -77,10 +77,7 @@ function updateCart() {
 // Initialize
 displayMenu();
 
-// Event listener for view cart button
-document.getElementById('viewCart').addEventListener('click', function () {
-  document.getElementById('cart').classList.toggle('hidden');
-});
+
 
 // Event listener for checkout button
 document.getElementById('checkout').addEventListener('click', function () {
