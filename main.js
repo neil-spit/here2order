@@ -77,13 +77,13 @@ function updateCart() {
 // Initialize
 displayMenu();
 
+// main.js
 
+const socket = io(); // Establish WebSocket connection with the server
 
-// Event listener for checkout button
 document.getElementById('checkout').addEventListener('click', function () {
-  alert('Thank you for your order!');
-  cart = [];
-  updateCart();
+  socket.emit('checkout'); // Send a message to the server
 });
+
 
 window.onload = displayMenu;
