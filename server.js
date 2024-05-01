@@ -21,9 +21,13 @@ io.on('connection', (socket) => {
   console.log('A user connected');
 
   // Handle toggleLED event
-  socket.on('toggleLED', () => {
-    console.log('Toggling LED');
+  socket.on('toggleLED', ({ duration }) => {
+    console.log(`Toggling LED for ${duration} milliseconds`);
     arduinoPort.write('t'); // Send 't' to toggle the LED
+    // Turn off the LED after the specified duration
+    setTimeout(() => {
+      arduinoPort.write('o'); // Send 'o' to turn off the LED
+    }, duration);
   });
 });
 

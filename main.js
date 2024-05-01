@@ -120,7 +120,22 @@ function showItemDetails(itemId) {
   dialog.classList.remove('hidden');
 }
 
+// Function to handle the "Order Now" button click
 document.getElementById('order-button').addEventListener('click', function () {
-  socket.emit('toggleLED'); // Send a message to the server to toggle the LED
-});
+  // Determine the duration based on the type of burger ordered
+  let duration;
+  const burgerType = document.getElementById('item-details').innerText;
+  if (burgerType.includes('Beef Burger')) {
+    duration = 10000; // 10 seconds for Beef Burger
+  } else if (burgerType.includes('Chicken Burger')) {
+    duration = 5000; // 5 seconds for Chicken Burger
+  } else if (burgerType.includes('Soy Burger')) {
+    duration = 2000; // 2 seconds for Soy Burger
+  } else {
+    // Default duration if burger type is not recognized
+    duration = 0; // Change this as needed
+  }
 
+  // Send a message to the server with the duration
+  socket.emit('toggleLED', { duration });
+});
