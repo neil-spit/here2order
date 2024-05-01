@@ -1,35 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Here2Order</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <header>
-      <img src="arrow.png" alt="Logo" />
-      <h1 id="title">Spazju Kreattiv</h1>
-      </a>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Here2Order</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
-    <div id="menu">
-      <img src="logo.png" alt="Menu Image"/>
-      <!-- Food items will be dynamically added here -->
-    </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/main.js" defer></script>
+</head>
+<body>
+  <header>
+    <img src="arrow.png" alt="Logo" />
+    <h1 id="title">Spazju Kreattiv</h1>
+    </a>
+  </header>
 
-    <div id="cart" class="hidden">
-      <h2 style="font-size: 50px; font-family: 'Now', sans-serif; padding: 40px; margin-top: -1px; display: flex; justify-content: center; align-items: center; color: #F7F7F7;">Your Order</h2>
-      <div id="cartItems">
-        <h2 style="font-size: 30px; font-family: 'Now', sans-serif; padding: 35px; margin-top: 60px; color: #000000;">Order Items</h2>
-        <!-- Cart items will be dynamically added here -->
-      </div>
-      <div id="cartTotal">Total: 0L</div>
-      <button id="checkout">Checkout</button>
-    </div>
+  <div id="menu">
+    <img src="logo.png" alt="Menu Image"/>
+    <!-- Food items will be dynamically added here -->
+  </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="main.js"></script>
-  </body>
+  <div id="item-details-dialog" class="hidden">
+    <div id="item-details-title">Your Order</div>
+    <div id="item-details"></div>
+    <button id="order-button">Order Now</button>
+  </div>
+
+</body>
 </html>

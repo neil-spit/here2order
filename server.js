@@ -4,32 +4,36 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const path = require('path');
+const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
 
-// Serve static files from the root directory
+const portName = '/dev/tty.usbmodem1301'; // Change this to the appropriate port for your Arduino Mega
+
+// Serve static files
 app.use(express.static(__dirname));
 
-// Route for the main page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+// Initialize serial port for Arduino communication
+const arduinoPort = new SerialPort({path: portName, baudRate: 9600 });
+const parser = arduinoPort.pipe(new ReadlineParser({ delimiter: '\n' }));
+
+// Handle connection
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Handle toggleLED event
+  socket.on('toggleLED', () => {
+    console.log('Toggling LED');
+    arduinoPort.write('t'); // Send 't' to toggle the LED
+  });
 });
 
-// Start server
+// Start the server
 const PORT = process.env.PORT || 3000;
-http.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+http.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
-// WebSocket connection
-io.on('connection', function(socket) {
-  console.log('A client connected');
-  // Listen for checkout message from the client
-  socket.on('checkout', function() {
-    console.log('Received checkout event from client');
-    // Emit event to toggle LED or perform other actions
-    io.emit('toggleLED');
-  });
-
-  // Handle disconnection
-  socket.on('disconnect', function() {
-    console.log('A client disconnected');
-  });
+// Log data received from Arduino
+parser.on('data', (data) => {
+  console.log('Data from Arduino:', data);
 });
