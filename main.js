@@ -122,9 +122,16 @@ function showItemDetails(itemId) {
 
 // Function to handle the "Order Now" button click
 document.getElementById('order-button').addEventListener('click', function () {
-  // Determine the duration based on the type of burger ordered
+  document.getElementById('item-details-dialog').classList.add('hidden');
+
+  document.getElementById('thank-you-dialog').classList.remove('hidden');
+
+  // Send a message to the server to toggle the LED
+  const itemDetails =
+    document.getElementById('item-details').innerText;
+  const burgerType = itemDetails;
   let duration;
-  const burgerType = document.getElementById('item-details').innerText;
+  console.log(burgerType);
   if (burgerType.includes('Beef Burger')) {
     duration = 10000; // 10 seconds for Beef Burger
   } else if (burgerType.includes('Chicken Burger')) {
@@ -136,6 +143,10 @@ document.getElementById('order-button').addEventListener('click', function () {
     duration = 0; // Change this as needed
   }
 
-  // Send a message to the server with the duration
+  console.log(duration);
   socket.emit('toggleLED', { duration });
+
+  setTimeout(() => {
+    document.getElementById('thank-you-dialog').classList.add('hidden');
+  }, duration);
 });
