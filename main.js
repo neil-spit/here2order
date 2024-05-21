@@ -1,11 +1,7 @@
-//const io = require('socket.io');
-
-// Sample food items data
 const menuItems = [
   { id: 1, name: 'Soy Burger', price: 238, image: 'veggie_burger.jpeg' },
   { id: 2, name: 'Beef Burger', price: 2430, image: 'beef_burger.jpeg' },
   { id: 3, name: 'Chicken Burger', price: 753, image: 'chicken_burger.jpeg' },
-  // Add more items as needed
 ];
 
 // Function to display menu
@@ -68,16 +64,11 @@ function placeOrder(item) {
 // Initialize
 displayMenu();
 
-const socket = io(); // Establish WebSocket connection with the server
-
+const socket = io(); 
 window.onload = displayMenu;
 
-// Event listener for the 'toggleLED' event
-socket.on('toggleLED', function () {
-  // Perform the action to toggle the LED
-  // For example, you can change the color of an LED icon or display a message
-  console.log('Received toggleLED event from the server');
-  // Add your code to toggle the LED here
+socket.on('togglePump', function () {
+  console.log('Received togglePump event from the server');
 });
 
 // Function to show item details dialog
@@ -144,9 +135,26 @@ document.getElementById('order-button').addEventListener('click', function () {
   }
 
   console.log(duration);
-  socket.emit('toggleLED', { duration });
+  socket.emit('togglePump', { duration });
 
   setTimeout(() => {
     document.getElementById('thank-you-dialog').classList.add('hidden');
   }, duration);
+});
+
+function showThankYouDialog() {
+  document.getElementById('thank-you-dialog').classList.add('active');
+  document.querySelector('.overlay').classList.add('active');
+}
+
+function hideThankYouDialog() {
+  document.getElementById('thank-you-dialog').classList.remove('active');
+  document.querySelector('.overlay').classList.remove('active');
+}
+
+document.getElementById('order-button').addEventListener('click', function() {
+  showThankYouDialog();
+  setTimeout(function() {
+      hideThankYouDialog();
+  }, 5000); // Close the dialog after 5 seconds
 });

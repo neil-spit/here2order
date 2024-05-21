@@ -7,7 +7,8 @@ const io = require('socket.io')(http);
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 
-const portName = '/dev/tty.usbmodem1301'; // Change this to the appropriate port for your Arduino Mega
+//const portName = '/dev/tty.usbmodem1101';
+const portName = 'COM3';
 
 // Serve static files
 app.use(express.static(__dirname));
@@ -20,13 +21,13 @@ const parser = arduinoPort.pipe(new ReadlineParser({ delimiter: '\n' }));
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  // Handle toggleLED event
-  socket.on('toggleLED', ({ duration }) => {
-    console.log(`Toggling LED for ${duration} milliseconds`);
-    arduinoPort.write('t'); // Send 't' to toggle the LED
-    // Turn off the LED after the specified duration
+  // Handle togglePump event
+  socket.on('togglePump', ({ duration }) => {
+    console.log(`Toggling Pump for ${duration} milliseconds`);
+    arduinoPort.write('t'); // Send 't' to toggle the Pump
+    // Turn off the Pump after the specified duration
     setTimeout(() => {
-      arduinoPort.write('o'); // Send 'o' to turn off the LED
+      arduinoPort.write('o'); // Send 'o' to turn off the Pump
     }, duration);
   });
 });

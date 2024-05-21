@@ -19,7 +19,7 @@
     <!-- Food items will be dynamically added here -->
   </div>
 
-  <div id="item-details-dialog" class="hidden">
+  <div id="item-details-dialog" class="dialog hidden">
     <div id="item-details-title">Your Order</div>
     <div id="item-details"></div>
     <button id="order-button">Order Now</button>
@@ -28,6 +28,8 @@
   <div id="thank-you-dialog" class="dialog hidden">
     <div id="thank-you-message">Thank you for your order! Please be patient while your order is being prepared.</div>
   </div>
+
+  <div class="overlay hidden"></div> <!-- Overlay for greyed-out effect -->
 </body>
 <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
 <script src="main.js" defer></script>
