@@ -101,7 +101,7 @@ header img {
   position: fixed; /* or absolute */
   top: 50%; 
   left: 50%; 
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(200%);
   background-color: #f2f2f2; /* Grey background */
   padding: 20px; 
   border: 1px solid #ccc;
@@ -136,7 +136,7 @@ header img {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(200%);
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
@@ -164,7 +164,7 @@ button {
   background-color: #333;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 button:hover {

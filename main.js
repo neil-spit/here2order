@@ -1,8 +1,10 @@
 const menuItems = [
-  { id: 1, name: 'Soy Burger', price: 238, image: 'veggie_burger.jpeg' },
-  { id: 2, name: 'Beef Burger', price: 2430, image: 'beef_burger.jpeg' },
-  { id: 3, name: 'Chicken Burger', price: 753, image: 'chicken_burger.jpeg' },
+  { id: 1, name: 'Soy Burger', price: 238, image: 'veggie_burger.jpeg', description1: 'Deliciously plant-based and eco-friendly, the burger patty is made from curdled soybeans.', description2: 'This burger is a must try!' },
+  { id: 2, name: 'Beef Burger', price: 2430, image: 'beef_burger.jpeg', description1: 'Pure beef, sourced from our very own cows. 100% meat.', description2: 'We have a habit of naming each burger after the cow that made it. Slaughter for today: Mary!' },
+  { id: 3, name: 'Chicken Burger', price: 753, image: 'chicken_burger.jpeg', description1: 'Why not opt for a chicken burger, made from the freshest of breasts?', description2: 'This meal is a must-have, chicken so fresh you can hear it cluck!' },
 ];
+
+let duration;
 
 // Function to display menu
 function displayMenu() {
@@ -26,8 +28,10 @@ function displayMenu() {
     menuItem.classList.add('menu-item');
     menuItem.innerHTML = `
           <img src="${item.image}" alt="${item.name}">
-          <h3>${item.name}</h3>
-          <p>${item.price}L</p>
+          <h1>${item.name}</h1>
+          <h2>Price: ${item.price}L</h2>
+          <p>${item.description1}</p>
+          <p>${item.description2}</p>
           <button onclick="showItemDetails(${item.id})">Order Now</button>
       `;
     menuElement.appendChild(menuItem);
@@ -121,7 +125,6 @@ document.getElementById('order-button').addEventListener('click', function () {
   const itemDetails =
     document.getElementById('item-details').innerText;
   const burgerType = itemDetails;
-  let duration;
   console.log(burgerType);
   if (burgerType.includes('Beef Burger')) {
     duration = 10000; // 10 seconds for Beef Burger
@@ -156,5 +159,5 @@ document.getElementById('order-button').addEventListener('click', function() {
   showThankYouDialog();
   setTimeout(function() {
       hideThankYouDialog();
-  }, 5000); // Close the dialog after 5 seconds
+  }, duration); 
 });

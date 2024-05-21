@@ -11,11 +11,9 @@
   <header>
     <img src="arrow.png" alt="Logo" />
     <h1 id="title">Spazju Kreattiv</h1>
-    </a>
   </header>
 
   <div id="menu">
-    <img src="logo.png" alt="Menu Image"/>
     <!-- Food items will be dynamically added here -->
   </div>
 
@@ -26,7 +24,11 @@
   </div>
 
   <div id="thank-you-dialog" class="dialog hidden">
-    <div id="thank-you-message">Thank you for your order! Please be patient while your order is being prepared.</div>
+    <div id="thank-you-message">
+      <p>Thank you for your order!</p>
+      <p>Please be patient while your order is being prepared.</p>
+      <img id="loading-gif" src="loading.gif" alt="Loading" />
+    </div>
   </div>
 
   <div class="overlay hidden"></div> <!-- Overlay for greyed-out effect -->
