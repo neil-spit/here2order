@@ -9,7 +9,7 @@ let duration;
 // Function to display menu
 function displayMenu() {
   const menuElement = document.getElementById('menu');
-  menuElement.innerHTML = ''; // Clear previous content
+  menuElement.innerHTML = '';
 
   // Add image at the top of the menu
   const menuImage = document.createElement('img');
@@ -110,7 +110,7 @@ function showItemDetails(itemId) {
   };
 
   cancelButton.classList.add('cancel-button');
-  dialog.appendChild(cancelButton); // Append the cancel button to the dialog
+  dialog.appendChild(cancelButton); 
   document.body.appendChild(overlay);
   dialog.classList.remove('hidden');
 }
@@ -127,17 +127,16 @@ document.getElementById('order-button').addEventListener('click', function () {
   const burgerType = itemDetails;
   console.log(burgerType);
   if (burgerType.includes('Beef Burger')) {
-    duration = 10000; // 10 seconds for Beef Burger
+    duration = 62000; // 62 seconds for Beef Burger
   } else if (burgerType.includes('Chicken Burger')) {
-    duration = 5000; // 5 seconds for Chicken Burger
+    duration = 19000; // 19 seconds for Chicken Burger
   } else if (burgerType.includes('Soy Burger')) {
-    duration = 2000; // 2 seconds for Soy Burger
+    duration = 6000; // 6 seconds for Soy Burger
   } else {
     // Default duration if burger type is not recognized
     duration = 0; // Change this as needed
   }
 
-  console.log(duration);
   socket.emit('togglePump', { duration });
 
   setTimeout(() => {

@@ -29,6 +29,10 @@ io.on('connection', (socket) => {
     setTimeout(() => {
       arduinoPort.write('o'); // Send 'o' to turn off the Pump
     }, duration);
+    arduinoPort.write('e'); // Send 'e' to toggle the Drain
+    setTimeout(() => {
+      arduinoPort.write('f'); // Send 'f' to turn off the Drain
+    }, duration);
   });
 });
 
