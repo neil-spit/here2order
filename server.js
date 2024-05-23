@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
       }, 15000);
     }, fillerDuration);
   });
-});
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

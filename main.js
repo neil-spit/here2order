@@ -116,17 +116,15 @@ document.getElementById('order-button').addEventListener('click', function () {
     drainDuration = 0; // Default duration for drain pump
   }
 
-  // Create a message with the durations
-  const message = `${fillerDuration},${drainDuration}`;
-
   // Send the durations to the Arduino
   socket.emit('togglePump', { fillerDuration, drainDuration });
 
   showThankYouDialog();
 
+  const totalDuration = fillerDuration + 15000 + drainDuration;
   setTimeout(() => {
     hideThankYouDialog();
-  }, fillerDuration + 15000 + drainDuration);
+  }, totalDuration);
 });
 
 function showThankYouDialog() {
