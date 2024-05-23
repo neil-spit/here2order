@@ -7,7 +7,8 @@ const io = require('socket.io')(http);
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 
-const portName = 'COM3';
+// Replace with your Arduino port name
+//const portName = 'COM3';
 
 // Serve static files
 app.use(express.static(__dirname));
@@ -16,37 +17,31 @@ app.use(express.static(__dirname));
 const arduinoPort = new SerialPort({ path: portName, baudRate: 9600 });
 const parser = arduinoPort.pipe(new ReadlineParser({ delimiter: '\n' }));
 
-// Handle connection
-io.on('connection', (socket) => {
-  console.log('A user connected');
+socket.on('togglePump', ({ fillerDuration, drainDuration }) => {
+  console.log(`Filling tank for ${fillerDuration} milliseconds`);
 
-  // Handle togglePump event
-  socket.on('togglePump', ({ fillerDuration, drainDuration }) => {
-    console.log(`Filling tank for ${fillerDuration} milliseconds`);
+  // Start the fill pump
+  arduinoPort.write('t'); // Send 't' to start filling the tank
+  setTimeout(() => {
+    arduinoPort.write('o'); // Send 'o' to stop filling the tank
+    console.log('Filling complete. Pausing for 15 seconds.');
 
-    // Start the fill pump
-    arduinoPort.write('t'); // Send 't' to start filling the tank
+    // Pause for 15 seconds
     setTimeout(() => {
-      arduinoPort.write('o'); // Send 'o' to stop filling the tank
-      console.log('Filling complete. Pausing for 15 seconds.');
+      console.log(`Emptying tank for ${drainDuration} milliseconds`);
 
-      // Pause for 15 seconds
+      // Start the drain pump
+      arduinoPort.write('e'); // Send 'e' to start emptying the tank
       setTimeout(() => {
-        console.log(`Emptying tank for ${drainDuration} milliseconds`);
+        arduinoPort.write('f'); // Send 'f' to stop emptying the tank
+        console.log('Emptying complete.');
 
-        // Start the drain pump
-        arduinoPort.write('e'); // Send 'e' to start emptying the tank
-        setTimeout(() => {
-          arduinoPort.write('f'); // Send 'f' to stop emptying the tank
-          console.log('Emptying complete.');
-
-          // Hide thank you dialog after the emptying duration
-          socket.emit('hideThankYouDialog');
-        }, drainDuration);
-      }, 15000);
-    }, fillerDuration);
-  });
-
+        // Hide thank you dialog after the emptying duration
+        socket.emit('hideThankYouDialog');
+      }, drainDuration);
+    }, 15000);
+  }, fillerDuration);
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
