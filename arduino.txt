@@ -9,16 +9,20 @@ void setup() {
 
 void loop() {
   if (Serial.available() > 0) {
-    char command = Serial.read();
-    if (command == 't') {
+    int fillerDuration = Serial.parseInt();
+    int drainDuration = Serial.parseInt();
+
+    if (fillerDuration > 0) {
       digitalWrite(FILL_TANK_PIN, HIGH);
-    } else if (command == 'o') {
+      delay(fillerDuration);
       digitalWrite(FILL_TANK_PIN, LOW);
-      delay(15000);
-    } 
-    if (command == 'e'){ 
+    }
+
+    delay(15000);
+
+    if (drainDuration > 0) {
       digitalWrite(EMPTY_TANK_PIN, HIGH);
-    } else if (command == 'f') {
+      delay(drainDuration);
       digitalWrite(EMPTY_TANK_PIN, LOW);
     }
   }

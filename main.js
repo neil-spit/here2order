@@ -4,8 +4,6 @@ const menuItems = [
   { id: 3, name: 'Chicken Burger', price: 753, image: 'chicken_burger.jpeg', description1: 'Why not opt for a chicken burger, made from the freshest of breasts?', description2: 'This meal is a must-have, chicken so fresh you can hear it cluck!' },
 ];
 
-let duration;
-
 // Function to display menu
 function displayMenu() {
   const menuElement = document.getElementById('menu');
@@ -19,7 +17,7 @@ function displayMenu() {
 
   // Add some spacing between the image and the menu items
   const spacingElement = document.createElement('div');
-  spacingElement.style.marginBottom = '1rem'; // Adjust spacing as needed
+  spacingElement.style.marginBottom = '1rem';
   menuElement.appendChild(spacingElement);
 
   // Add menu items
@@ -27,13 +25,13 @@ function displayMenu() {
     const menuItem = document.createElement('div');
     menuItem.classList.add('menu-item');
     menuItem.innerHTML = `
-          <img src="${item.image}" alt="${item.name}">
-          <h1>${item.name}</h1>
-          <h2>Price: ${item.price}L</h2>
-          <p>${item.description1}</p>
-          <p>${item.description2}</p>
-          <button onclick="showItemDetails(${item.id})">Order Now</button>
-      `;
+      <img src="${item.image}" alt="${item.name}">
+      <h1>${item.name}</h1>
+      <h2>Price: ${item.price}L</h2>
+      <p>${item.description1}</p>
+      <p>${item.description2}</p>
+      <button onclick="showItemDetails(${item.id})">Order Now</button>
+    `;
     menuElement.appendChild(menuItem);
   });
 }
@@ -60,7 +58,6 @@ function showItemDetails(itemId) {
 
 // Function to place order
 function placeOrder(item) {
-  // Send the order details to the server using Socket.IO
   const socket = io();
   socket.emit('placeOrder', item);
 }
@@ -68,11 +65,11 @@ function placeOrder(item) {
 // Initialize
 displayMenu();
 
-const socket = io(); 
+const socket = io();
 window.onload = displayMenu;
 
-socket.on('togglePump', function () {
-  console.log('Received togglePump event from the server');
+socket.on('hideThankYouDialog', function () {
+  hideThankYouDialog();
 });
 
 // Function to show item details dialog
@@ -110,38 +107,43 @@ function showItemDetails(itemId) {
   };
 
   cancelButton.classList.add('cancel-button');
-  dialog.appendChild(cancelButton); 
+  dialog.appendChild(cancelButton);
   document.body.appendChild(overlay);
   dialog.classList.remove('hidden');
 }
 
 // Function to handle the "Order Now" button click
 document.getElementById('order-button').addEventListener('click', function () {
-  document.getElementById('item-details-dialog').classList.add('hidden');
-
-  document.getElementById('thank-you-dialog').classList.remove('hidden');
-
-  // Send a message to the server to toggle the LED
-  const itemDetails =
-    document.getElementById('item-details').innerText;
+  const itemDetails = document.getElementById('item-details').innerText;
   const burgerType = itemDetails;
-  console.log(burgerType);
+  let fillerDuration;
+  let drainDuration;
+
   if (burgerType.includes('Beef Burger')) {
-    duration = 62000; // 62 seconds for Beef Burger
+    fillerDuration = 31000; // 31 seconds for filler pump
+    drainDuration = 31000;  // 31 seconds for drain pump
   } else if (burgerType.includes('Chicken Burger')) {
-    duration = 19000; // 19 seconds for Chicken Burger
+    fillerDuration = 9500; // 9.5 seconds for filler pump
+    drainDuration = 9500;  // 9.5 seconds for drain pump
   } else if (burgerType.includes('Soy Burger')) {
-    duration = 6000; // 6 seconds for Soy Burger
+    fillerDuration = 3000; // 3 seconds for filler pump
+    drainDuration = 3000;  // 3 seconds for drain pump
   } else {
-    // Default duration if burger type is not recognized
-    duration = 0; // Change this as needed
+    fillerDuration = 0; // Default duration for filler pump
+    drainDuration = 0; // Default duration for drain pump
   }
 
-  socket.emit('togglePump', { duration });
+  // Create a message with the durations
+  const message = `${fillerDuration},${drainDuration}`;
+
+  // Send the durations to the Arduino
+  socket.emit('togglePump', { fillerDuration, drainDuration });
+
+  showThankYouDialog();
 
   setTimeout(() => {
-    document.getElementById('thank-you-dialog').classList.add('hidden');
-  }, duration);
+    hideThankYouDialog();
+  }, fillerDuration + 15000 + drainDuration);
 });
 
 function showThankYouDialog() {
@@ -153,10 +155,3 @@ function hideThankYouDialog() {
   document.getElementById('thank-you-dialog').classList.remove('active');
   document.querySelector('.overlay').classList.remove('active');
 }
-
-document.getElementById('order-button').addEventListener('click', function() {
-  showThankYouDialog();
-  setTimeout(function() {
-      hideThankYouDialog();
-  }, duration); 
-});

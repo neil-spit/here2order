@@ -7,14 +7,14 @@ const io = require('socket.io')(http);
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 
-//const portName = '/dev/tty.usbmodem1101';
-const portName = 'COM3';
+// Replace with your Arduino port name
+//const portName = 'COM3';
 
 // Serve static files
 app.use(express.static(__dirname));
 
 // Initialize serial port for Arduino communication
-const arduinoPort = new SerialPort({path: portName, baudRate: 9600 });
+const arduinoPort = new SerialPort({ path: portName, baudRate: 9600 });
 const parser = arduinoPort.pipe(new ReadlineParser({ delimiter: '\n' }));
 
 // Handle connection
@@ -23,15 +23,28 @@ io.on('connection', (socket) => {
 
   // Handle togglePump event
   socket.on('togglePump', ({ duration }) => {
-    console.log(`Toggling Pump for ${duration} milliseconds`);
-    arduinoPort.write('t'); // Send 't' to toggle the Pump
-    // Turn off the Pump after the specified duration
+    console.log(`Filling tank for ${duration} milliseconds`);
+
+    // Start the fill pump
+    arduinoPort.write('t'); // Send 't' to start filling the tank
     setTimeout(() => {
-      arduinoPort.write('o'); // Send 'o' to turn off the Pump
-    }, duration);
-    arduinoPort.write('e'); // Send 'e' to toggle the Drain
-    setTimeout(() => {
-      arduinoPort.write('f'); // Send 'f' to turn off the Drain
+      arduinoPort.write('o'); // Send 'o' to stop filling the tank
+      console.log('Filling complete. Pausing for 15 seconds.');
+
+      // Pause for 15 seconds
+      setTimeout(() => {
+        console.log('Starting to empty the tank.');
+
+        // Start the drain pump
+        arduinoPort.write('e'); // Send 'e' to start emptying the tank
+        setTimeout(() => {
+          arduinoPort.write('f'); // Send 'f' to stop emptying the tank
+          console.log('Emptying complete.');
+
+          // Hide thank you dialog after the emptying duration
+          socket.emit('hideThankYouDialog');
+        }, duration);
+      }, 15000);
     }, duration);
   });
 });
