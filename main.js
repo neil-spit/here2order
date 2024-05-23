@@ -147,11 +147,11 @@ document.getElementById('order-button').addEventListener('click', function () {
 });
 
 function showThankYouDialog() {
-  document.getElementById('thank-you-dialog').classList.add('active');
-  document.querySelector('.overlay').classList.add('active');
+  document.getElementById('thank-you-dialog').classList.remove('hidden');
+  document.querySelector('.overlay').classList.remove('hidden');
 }
 
 function hideThankYouDialog() {
-  document.getElementById('thank-you-dialog').classList.remove('active');
-  document.querySelector('.overlay').classList.remove('active');
+  document.getElementById('thank-you-dialog').classList.add('hidden');
+  document.querySelector('.overlay').classList.add('hidden');
 }
