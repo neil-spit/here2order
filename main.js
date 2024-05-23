@@ -40,50 +40,16 @@ function displayMenu() {
 function showItemDetails(itemId) {
   const selectedItem = menuItems.find((item) => item.id === itemId);
   const dialog = document.getElementById('item-details-dialog');
-  const itemDetails = document.getElementById('item-details');
-  const orderButton = document.getElementById('order-button');
-
-  itemDetails.innerHTML = `
-    <h2>${selectedItem.name}</h2>
-    <p>Price: ${selectedItem.price}L</p>
-  `;
-
-  orderButton.onclick = () => {
-    placeOrder(selectedItem);
-    dialog.classList.add('hidden');
-  };
-
-  dialog.classList.remove('hidden');
-}
-
-// Function to place order
-function placeOrder(item) {
-  const socket = io();
-  socket.emit('placeOrder', item);
-}
-
-// Initialize
-displayMenu();
-
-const socket = io();
-window.onload = displayMenu;
-
-socket.on('hideThankYouDialog', function () {
-  hideThankYouDialog();
-});
-
-// Function to show item details dialog
-function showItemDetails(itemId) {
-  const selectedItem = menuItems.find((item) => item.id === itemId);
-  const dialog = document.getElementById('item-details-dialog');
-  const overlay = document.createElement('div');
-  overlay.classList.add('overlay');
+  const overlay = document.querySelector('.overlay'); // Get the overlay element
+  
+  // Show the overlay when the item details dialog is shown
+  overlay.classList.remove('hidden');
 
   const cancelButton = document.createElement('button');
   cancelButton.innerText = 'Cancel';
   cancelButton.addEventListener('click', () => {
     dialog.classList.add('hidden');
-    overlay.remove();
+    overlay.classList.add('hidden');
   });
 
   // Remove any existing cancel button before appending the new one
@@ -103,7 +69,7 @@ function showItemDetails(itemId) {
   orderButton.onclick = () => {
     placeOrder(selectedItem);
     dialog.classList.add('hidden');
-    overlay.remove();
+    overlay.classList.add('hidden');
   };
 
   cancelButton.classList.add('cancel-button');
@@ -111,6 +77,22 @@ function showItemDetails(itemId) {
   document.body.appendChild(overlay);
   dialog.classList.remove('hidden');
 }
+
+// Function to place order
+function placeOrder(item) {
+  const socket = io();
+  socket.emit('placeOrder', item);
+}
+
+// Initialize
+displayMenu();
+
+const socket = io();
+window.onload = displayMenu;
+
+socket.on('hideThankYouDialog', function () {
+  hideThankYouDialog();
+});
 
 // Function to handle the "Order Now" button click
 document.getElementById('order-button').addEventListener('click', function () {
