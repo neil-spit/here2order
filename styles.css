@@ -97,6 +97,7 @@ header img {
   display: block; /* Show the overlay when active */
 }
 
+
 #item-details-dialog {
   position: fixed; /* or absolute */
   top: 50%; 

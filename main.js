@@ -41,6 +41,7 @@ function showItemDetails(itemId) {
   const selectedItem = menuItems.find((item) => item.id === itemId);
   const dialog = document.getElementById('item-details-dialog');
   const overlay = document.querySelector('.overlay'); // Get the overlay element
+  overlay.classList.add('active'); // Show the overlay
   
   // Show the overlay when the item details dialog is shown
   overlay.classList.remove('hidden');
@@ -135,5 +136,6 @@ function showThankYouDialog() {
 
 function hideThankYouDialog() {
   document.getElementById('thank-you-dialog').classList.add('hidden');
-  document.querySelector('.overlay').classList.add('hidden');
+  const overlay = document.querySelector('.overlay'); // Get the overlay element
+  overlay.classList.remove('active'); // Hide the overlay
 }
