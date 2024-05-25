@@ -90,7 +90,6 @@ header img {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
   z-index: 999; /* Make sure it's above other content */
-  display: none; /* Initially hidden */
 }
 
 .overlay.active {
@@ -98,7 +97,7 @@ header img {
 }
 
 
-#item-details-dialog {
+#item-details-dialog, #thank-you-dialog {
   position: fixed; /* or absolute */
   top: 50%; 
   left: 50%; 

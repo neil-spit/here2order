@@ -40,24 +40,11 @@ function displayMenu() {
 function showItemDetails(itemId) {
   const selectedItem = menuItems.find((item) => item.id === itemId);
   const dialog = document.getElementById('item-details-dialog');
-  const overlay = document.querySelector('.overlay'); // Get the overlay element
-  overlay.classList.add('active'); // Show the overlay
-  
-  // Show the overlay when the item details dialog is shown
+  const overlay = document.querySelector('.overlay');
+
+  // Show the overlay and dialog
   overlay.classList.remove('hidden');
-
-  const cancelButton = document.createElement('button');
-  cancelButton.innerText = 'Cancel';
-  cancelButton.addEventListener('click', () => {
-    dialog.classList.add('hidden');
-    overlay.classList.add('hidden');
-  });
-
-  // Remove any existing cancel button before appending the new one
-  const existingCancelButton = dialog.querySelector('.cancel-button');
-  if (existingCancelButton) {
-    existingCancelButton.remove();
-  }
+  dialog.classList.remove('hidden');
 
   const itemDetails = document.getElementById('item-details');
   const orderButton = document.getElementById('order-button');
@@ -69,20 +56,33 @@ function showItemDetails(itemId) {
 
   orderButton.onclick = () => {
     placeOrder(selectedItem);
-    dialog.classList.add('hidden');
-    overlay.classList.add('hidden');
+    hideDialog(dialog, overlay);
+    showThankYouDialog();
   };
 
+  const cancelButton = document.createElement('button');
+  cancelButton.innerText = 'Cancel';
   cancelButton.classList.add('cancel-button');
+  cancelButton.onclick = () => {
+    hideDialog(dialog, overlay);
+  };
+
+  const existingCancelButton = dialog.querySelector('.cancel-button');
+  if (existingCancelButton) {
+    existingCancelButton.remove();
+  }
+
   dialog.appendChild(cancelButton);
-  document.body.appendChild(overlay);
-  dialog.classList.remove('hidden');
 }
 
 // Function to place order
 function placeOrder(item) {
   const socket = io();
   socket.emit('placeOrder', item);
+
+  socket.on('hideThankYouDialog', function () {
+    hideThankYouDialog();
+  });
 }
 
 // Initialize
@@ -103,14 +103,14 @@ document.getElementById('order-button').addEventListener('click', function () {
   let drainDuration;
 
   if (burgerType.includes('Beef Burger')) {
-    fillerDuration = 31000; // 31 seconds for filler pump
-    drainDuration = 31000;  // 31 seconds for drain pump
+    fillerDuration = 55000; // 31 seconds for filler pump
+    drainDuration = 65000;  // 31 seconds for drain pump
   } else if (burgerType.includes('Chicken Burger')) {
-    fillerDuration = 9500; // 9.5 seconds for filler pump
-    drainDuration = 9500;  // 9.5 seconds for drain pump
+    fillerDuration = 15000; // 9.5 seconds for filler pump
+    drainDuration = 3000;  // 9.5 seconds for drain pump
   } else if (burgerType.includes('Soy Burger')) {
-    fillerDuration = 3000; // 3 seconds for filler pump
-    drainDuration = 3000;  // 3 seconds for drain pump
+    fillerDuration = 2000; // 3 seconds for filler pump
+    drainDuration = 4000;  // 3 seconds for drain pump
   } else {
     fillerDuration = 0; // Default duration for filler pump
     drainDuration = 0; // Default duration for drain pump
@@ -134,6 +134,20 @@ function showThankYouDialog() {
 
 function hideThankYouDialog() {
   document.getElementById('thank-you-dialog').classList.add('hidden');
-  const overlay = document.querySelector('.overlay'); // Get the overlay element
-  overlay.classList.remove('active'); // Hide the overlay
+  const overlay = document.querySelector('.overlay');
+  overlay.classList.add('hidden');
+}
+
+document.getElementById('cancel-button').addEventListener('click', function () {
+  hideThankYouDialog();
+});
+
+function hideDialog(dialog, overlay) {
+  dialog.classList.add('hidden');
+  overlay.classList.add('hidden');
+}
+
+function showDialog(dialog, overlay) {
+  dialog.classList.remove('hidden');
+  overlay.classList.remove('hidden');
 }
